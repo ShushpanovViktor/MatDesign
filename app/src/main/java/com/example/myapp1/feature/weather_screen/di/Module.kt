@@ -4,9 +4,14 @@ import com.example.myapp1.feature.weather_screen.data.api.WeatherRemoteSource
 import com.example.myapp1.feature.weather_screen.data.api.WeatherRepo
 import com.example.myapp1.feature.weather_screen.data.api.WeatherRepoImpl
 import com.example.myapp1.feature.weather_screen.data.api.WeatherApi
+import com.example.myapp1.feature.weather_screen.data.storage.CityDataStorage
+import com.example.myapp1.feature.weather_screen.data.storage.CityDataStorageImpl
+import com.example.myapp1.feature.weather_screen.data.storage.SettingsRepo
+import com.example.myapp1.feature.weather_screen.data.storage.SettingsRepoImpl
 import com.example.myapp1.feature.weather_screen.ui.WeatherScreenViewModel
 import com.example.myapp1.feature.weather_screen.domain.WeatherInteractor
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -29,24 +34,31 @@ val appModule = module {
             .build()
     }
 
-
     single<WeatherApi> {
         get<Retrofit>().create(WeatherApi::class.java)
     }
 
-    single<WeatherRemoteSource> {
-        WeatherRemoteSource(get<WeatherApi>())
+    single {
+        WeatherRemoteSource(get())
     }
 
     single<WeatherRepo> {
-        WeatherRepoImpl(get<WeatherRemoteSource>())
+        WeatherRepoImpl(get())
     }
 
-    single<WeatherInteractor> {
-        WeatherInteractor(get<WeatherRepo>())
+    single {
+        WeatherInteractor(get())
     }
 
-    viewModel<WeatherScreenViewModel> {
-        WeatherScreenViewModel(get<WeatherInteractor>())
+    single<CityDataStorage> {
+        CityDataStorageImpl(androidContext())
+    }
+
+    single<SettingsRepo> {
+        SettingsRepoImpl(get())
+    }
+
+    viewModel {
+        WeatherScreenViewModel(get())
     }
 }

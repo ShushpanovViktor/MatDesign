@@ -2,4 +2,7 @@
     <string name="app_name">My App1</string>
     <string name="settings">Settings</string>
     <string name="weather">Weather</string>
+    <string name="wind_speed">Wind speed</string>
+    <string name="textview">TextView</string>
+    <string name="enter_the_city">Enter the city</string>
 </resources>

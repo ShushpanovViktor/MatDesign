@@ -1,21 +1,37 @@
 package com.example.myapp1.feature.weather_screen.ui
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+
+import com.example.myapp1.base.BaseViewModel
+import com.example.myapp1.base.Event
+import com.example.myapp1.feature.weather_screen.data.storage.SettingsRepo
 import com.example.myapp1.feature.weather_screen.domain.WeatherInteractor
 import com.example.myapp1.feature.weather_screen.domain.model.WeatherDomainModel
-import kotlinx.coroutines.launch
 
-class WeatherScreenViewModel(private val interactor: WeatherInteractor): ViewModel()
-{
-    val livedata: MutableLiveData<WeatherDomainModel> = MutableLiveData()
 
-    fun requestWeather() {
-        viewModelScope.launch{
-            livedata.postValue(interactor.getWeather())
+class WeatherScreenViewModel(private val interactor: WeatherInteractor): BaseViewModel<ViewState>() {
+    init {
+        processUiEvent(UIEvent.RequestWeather)
+    }
+
+    override fun initialViewState(): ViewState {
+        return ViewState(WeatherDomainModel(temperature = "0.0",speed = "0.0"))
+    }
+
+    override suspend fun reduce(event: Event, previousState: ViewState): ViewState? {
+        when (event) {
+            is UIEvent.RequestWeather -> {
+                TODO()
+            }
+            is DataEvent.SuccessWeatherRequest -> {
+                return previousState.copy(
+                    weatherModel = event.weatherModel,
+                                    )
+            }
+            is DataEvent.ErrorWeatherRequest -> {
+                return previousState.copy(
+                                   )
+            }
         }
-
-
+        return null
     }
 }

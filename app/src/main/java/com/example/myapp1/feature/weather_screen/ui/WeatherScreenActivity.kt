@@ -1,5 +1,6 @@
 package com.example.myapp1.feature.weather_screen.ui
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -19,15 +20,13 @@ class WeatherScreenActivity : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weather)
-        weatherScreenViewModel.livedata.observe(this, Observer(::render))
-        weatherScreenViewModel.requestWeather()
-        findViewById<Button>(R.id.buttonWind).setOnClickListener {
-            Intent(this, WindScreenActivity::class.java).also {startActivity(it)}
-        }
-    }
+        weatherScreenViewModel.viewState.observe(this, Observer(::render))
+         }
 
-    private fun render(state: WeatherDomainModel)
+    @SuppressLint("StringFormatInvalid")
+    private fun render(state: ViewState)
     {
-        findViewById<TextView>(R.id.tvTempeture).let {it.text = state.temperature}
+        findViewById<TextView>(R.id.tvTemperature).text =
+            getString(R.string.weather, state.weatherModel.temperature)
     }
 }
