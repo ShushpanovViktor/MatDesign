@@ -17,7 +17,7 @@ class WindScreenViewModel(private val interactor: WeatherInteractor): BaseViewMo
     override suspend fun reduce(event: Event, previousState: ViewState): ViewState? {
         when (event) {
             is UIEvent.GetWind -> {
-                    TODO()
+                    interactor.getWeather()
             }
             is DataEvent.SuccessWindGetting -> {
                 return previousState.copy(windDomainModel = event.windDomainModel)

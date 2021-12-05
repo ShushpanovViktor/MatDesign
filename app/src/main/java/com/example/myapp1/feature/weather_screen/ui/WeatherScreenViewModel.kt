@@ -20,7 +20,7 @@ class WeatherScreenViewModel(private val interactor: WeatherInteractor): BaseVie
     override suspend fun reduce(event: Event, previousState: ViewState): ViewState? {
         when (event) {
             is UIEvent.RequestWeather -> {
-                TODO()
+                interactor.getWeather()
             }
             is DataEvent.SuccessWeatherRequest -> {
                 return previousState.copy(
